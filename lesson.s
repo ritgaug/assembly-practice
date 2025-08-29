@@ -1,21 +1,18 @@
-@ r0 to r6 are general purpose registers
-@ r7 has special functionality called syscal. used when talking to operating system. we can store a numeric value in r7 that will map in a table to maybe end a program
-@ splr related to stack pointer
-@ pc program counter
-@ stack memory is stored in the RAM of the computer. List of numbers can be stored in memory
-@ sp registers gives the address of the next available memory in stack
-@ the stack memory grows in 4s
-@ lr stores the location where the code would jump back to after a function is executed
-
-/*this program will move data into r0
-and then data will be moved to r7 (storing information about syscalls). We need a method to communicate with the OS. This method comes in 2 pieces. system interrupts, and system called numbers
-we put a special number into r7 which tells the system what we would like it to do (we call an interrupt, which tells the OS that we need something done)
-the OS will read r7, takes the number in r7 which will correspond to a number in a look up table the OS references. that number will correspond with a spesific task.
-in this program the number will end the program*/
+@pushing data on the stack
 
 .global _start
 _start:
-	MOV R0,#30	@Move 1 into r0
+	LDR R0,	=list				@Load data (location of the first value from our list) from stack to R0,
+								
+	LDR R1,[R0]					@R0 hold an address, the address hold the value, so this puts that value in R1.
+	LDR R2,[R0,#4]				@R0 holds an address + 4 to incriment to next memory address, puts this value in R2
+
+
+.data						@this is the data section
+list:						@the name of the data
+	.word 4,5,-9,1,0,2,-3	@.word says each number will be a word long
 	
-	MOV R7,#1
-	SWI 0
+/*the shows where on the stack our first value (4) is located, now we retrieve it
+  refer to line 7*/
+
+ 
